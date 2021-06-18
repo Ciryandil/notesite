@@ -1,0 +1,27 @@
+{% extends 'blog/base.html' %}
+
+{% block content %} 
+
+<article class = "post">
+    {% if user == post.author %}
+    <aside class="actions">
+        <a class="btn btn-default" href="{% url 'post_edit' slug=post.slug %}">
+          {% include './icons/pencil-fill.svg' %}
+        </a>
+        <a class="btn btn-default" href="{% url 'post_remove' slug=post.slug %}"><span class="glyphicon glyphicon-remove"></span></a>
+        {% endif %}
+    </aside>
+    {% if post.published_date %}
+    <time class = "date">
+        {{post.published_date}}
+    </time>
+    {% endif %}
+    <h2>{{post.title}}</h2>
+    <p>{{ post.text|linebreaksbr }}</p>
+    <div>
+        <iframe id="iframe_pdf" src = "{{ url }}"
+            style = "width:800px; height:800px;" frameborder="0"></iframe>
+    </div>
+
+
+{% endblock %}
