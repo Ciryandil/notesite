@@ -19,8 +19,7 @@
     <h2>{{post.title}}</h2>
     <p>{{ post.text|linebreaksbr }}</p>
     <div>
-        <iframe id="iframe_pdf" src = "{{ url }}"
-            style = "width:800px; height:800px;" frameborder="0"></iframe>
+        <a class = "btn btn-default" href="{% url 'get_note' slug=post.slug %}">Show Note</a>
     </div>
 
 

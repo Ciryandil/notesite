@@ -1,4 +1,5 @@
 from django.contrib.auth import login
+from django.http.response import FileResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from .models import Post, Comment
 from django.utils import timezone
@@ -105,4 +106,13 @@ def post_remove(request, slug):
     post = get_object_or_404(Post, slug=slug)
     post.delete()
     return redirect('post_list')
+
+def get_note(request, slug):
+    post = get_object_or_404(Post, slug = slug)
+    path = './media/'+post.note.name
+    try:
+        return FileResponse(open(path,'rb'), content_type = 'application/pdf')
+    except:
+        raise Http404()
+
     
