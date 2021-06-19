@@ -18,7 +18,7 @@ def post_detail(request, slug):
    
     # get post object
     post = get_object_or_404(Post, slug=slug)
-    path = './media/'+'BitStuff1.pdf'
+    path = '/media/' +  post.note.name
     return render(request,
                   'blog/post_detail.html',{'post':post, 'url':path})
 
