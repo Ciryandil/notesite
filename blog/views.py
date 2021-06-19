@@ -26,8 +26,8 @@ def post_detail(request, slug):
 def post_new(request):
     if request.method == "POST":
         form = PostForm(request.POST, request.FILES)
-        if form.is_valid:
-            post = Post(title=request.POST.get('title', False), text=request.POST.get('text',False),note=request.FILES.get('note',False))
+        if form.is_valid():
+            post = form.save(commit = False)
             post.author = request.user
             post.publish()
             post.save()
