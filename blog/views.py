@@ -19,9 +19,11 @@ def post_detail(request, slug):
    
     # get post object
     post = get_object_or_404(Post, slug=slug)
-    path = '/media/' +  post.note.name
+    comments = Comment.objects.filter(post=post, parent=None)
+    
+    path = '/media/' + post.note.name
     return render(request,
-                  'blog/post_detail.html',{'post':post, 'url':path})
+                  'blog/post_detail.html',{'post':post, 'url':path, 'comments': comments})
 
 def post_new(request):
     if request.method == "POST":
@@ -76,31 +78,22 @@ def register(request):
     return redirect('register')
 
 def add_comment_to_post(request, slug):
-    post = get_object_or_404(Post, slug=slug)
-    comments = post.comments.filter(parent__isnull=True)
+    
     if request.method == "POST":
-        form = CommentForm(request.POST)
-        if form.is_valid():
-            parent_obj = None 
-            # get parent comment id 
-            try:
-                parent_id = int(request.POST.get('parent_id'))
-            except:
-                parent_id = None
-            
-            if parent_id: 
-                    parent_obj = Comment.objects.get(id=parent_id)
-                    if parent_obj:
-                        reply = form.save(commit=False)
-                        reply.parent = parent_obj
-
-            comment = form.save(commit=False)
-            comment.post = post
+        text  = request.POST.get('comment')
+        author = request.user
+        post = get_object_or_404(Post,slug=slug)
+        parent_id = request.POST.get('parent_id')
+        if parent_id == "":
+            comment = Comment(post=post, author=author, text=text, created_date=timezone.now)
             comment.save()
-            return redirect('post_detail', slug=post.slug)
-    else:
-        form = CommentForm()
-    return render(request, 'blog/add_comment_to_post.html', {'form': form}) 
+        else:
+            parent = get_object_or_404(Comment,id=parent_id)
+            comment = Comment(post=post,author=author,text=text,created_date=timezone.now,parent=parent)
+            comment.save()
+    
+    return redirect('post_detail', slug=post.slug)
+     
 
 def post_remove(request, slug):
     post = get_object_or_404(Post, slug=slug)

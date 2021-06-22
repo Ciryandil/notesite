@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.text import slugify 
 from django.core.files.storage import FileSystemStorage
 from .validators import validate_file_extension
+from django.contrib.auth.models import User
 
 
 class Post(models.Model):
@@ -30,8 +31,8 @@ class Post(models.Model):
 
 class Comment(models.Model):
     post = models.ForeignKey('blog.Post', on_delete = models.CASCADE, related_name = 'comments')
-    author = models.CharField(max_length = 50)
-    text = models.CharField(max_length=400)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField(max_length=400)
     created_date = models.DateTimeField(default = timezone.now)
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null = True, blank = True, related_name='replies')
     

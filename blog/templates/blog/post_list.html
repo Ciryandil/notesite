@@ -7,7 +7,7 @@
         {{ post.created_date }}
     </time>
     <h2><a href="{% url 'post_detail' slug=post.slug %}">{{ post.title }}</a></h2>
-    <h6>{{post.author}}</h6>
+    <h6><a href = {% url 'profile' username=post.author %}>{{post.author}}</a></h6>
     <p>{{ post.text|linebreaksbr }}</p>
     <p>Comments: {{post.comments.count}}</p> 
 </article>

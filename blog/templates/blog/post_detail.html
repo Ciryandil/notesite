@@ -1,26 +1,81 @@
 {% extends 'blog/base.html' %}
 
-{% block content %} 
+{% block content %}
 
-<article class = "post">
+<article class="post">
     {% if user == post.author %}
     <aside class="actions">
         <a class="btn btn-default" href="{% url 'post_edit' slug=post.slug %}">
-          {% include './icons/pencil-fill.svg' %}
+            {% include './icons/pencil-fill.svg' %}
         </a>
-        <a class="btn btn-default" href="{% url 'post_remove' slug=post.slug %}"><span class="glyphicon glyphicon-remove"></span></a>
+        <a class="btn btn-default" href="{% url 'post_remove' slug=post.slug %}">
+            {% include './icons/trash.svg' %}
+            <span class="glyphicon glyphicon-remove"></span></a>
         {% endif %}
     </aside>
     {% if post.published_date %}
-    <time class = "date">
+    <time class="date">
         {{post.published_date}}
     </time>
     {% endif %}
     <h2>{{post.title}}</h2>
     <p>{{ post.text|linebreaksbr }}</p>
     <div>
-        <a class = "btn btn-default" href="{% url 'get_note' slug=post.slug %}">Show Note</a>
+        <a class="btn btn-default" href="{% url 'get_note' slug=post.slug %}">Show Note</a>
+    </div>
+    {% for comment in comments %}
+
+    <div class="comment">
+        <div class="date">
+            {{ comment.created_date }}
+
+        </div>
+        <strong>{{ comment.author }}</strong>
+        <p>{{ comment.text|linebreaks }}</p>
+        <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" aria-expanded="false"
+            aria-controls="replyBox">
+            Reply
+        </button>
+        <div class="collapse" id="replyBox">
+            <div class="card card-body my-2">
+                <form action="post-comment" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="comment" placeholder="Enter comment here">
+
+                    <input type="hidden" name="parent_id" value="{{comment.id}}">
+
+                    <input type="submit" value="Comment">
+                </form>
+            </div>
+        </div>
+        <div class="replies bg-danger my-2 ">
+            {% for reply in comment.replies.all %}
+            <div class="comment">
+                <div class="date">
+                    {{ reply.created_date }}
+        
+                </div>
+                <strong>{{ reply.author }}</strong>
+                <p>{{ reply.text|linebreaks }}</p>
+            {% endfor %}
+         </div>
+
+
     </div>
 
+    {% empty %}
+    <p>No comments here yet :(</p>
+    {% endfor %}
+    <div>
+        {% if user.is_authenticated %}
+        <form action="post-comment" method="POST">
+            {% csrf_token %}
+            <input type="text" name="comment" placeholder="Enter comment here">
 
-{% endblock %}
+            <input type="hidden" name="parent_id" value="">
+
+            <input type="submit" value="Comment">
+        </form>
+        {% endif %}
+    </div>
+    {% endblock %}
