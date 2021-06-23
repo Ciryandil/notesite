@@ -20,51 +20,59 @@
 <body>
     <header class="page-header">
         <div class="container">
-            {% if user.is_authenticated %}
-            <div class="row row-cols-1">
-                <div class="col">
-                    <a class="top-menu" href="{% url 'profile' username=user.get_username %}">Welcome back, {{user.get_username}}!</a>
-
-                </div>
-            </div>
-            <div class="row row-cols-1">
-                <div class="col">
-                    <a href="{% url 'logout'%}?next={{request.path}}" class="top-menu">Logout</a>
-                </div>
-            </div>
-
-            <div class="row row-cols-1">
-                <div class="col">
-                    <a href="{% url 'post_new' %}" class="top-menu">
-                        {% include './icons/file-earmark-plus.svg' %}
-                    </a>
-                </div>
-            </div>
-
-            {% else %}
-            <div class="row row-cols-1">
-                <div class="col">
-                    <a href="{% url 'login'%}?next={{request.path}}" class="top-menu">Login</a>
-                </div>
-            </div>
-            <div class="row row-cols-1">
-                <div class="col">
-                    <a href="{% url 'register' %}" class="top-menu">Register</a>
-                </div>
-            </div>
-
-            {% endif %}
+           
 
             <h1 class="text-center"><a href="/">NoteSite: Save And Share Your Notes!</a></h1>
         </div>
     </header>
     <main class="container">
-        <div class="row">
+        <div class="col-md-auto">
+        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            {% include './icons/three-dots.svg' %}
+          </a>
+            <div class="col" id="collapseExample">
+                {% if user.is_authenticated %}
+                <div class="row row-cols-1">
+                    <div class="col">
+                        <a class="sidebar-nav" href="{% url 'profile' username=user.get_username %}">Welcome back, {{user.get_username}}!</a>
+    
+                    </div>
+                </div>
+                <div class="row row-cols-1">
+                    <div class="col">
+                        <a href="{% url 'post_new' %}" class="sidebar-nav">Make a new post
+                            {% include './icons/file-earmark-plus.svg' %}
+                        </a>
+                    </div>
+                </div>
+                <div class="row row-cols-1">
+                    <div class="col">
+                        <a href="{% url 'logout'%}?next={{request.path}}" class="sidebar-nav">Logout</a>
+                    </div>
+                </div>
+                
+                
+    
+                {% else %}
+                <div class="row row-cols-1">
+                    <div class="col">
+                        <a href="{% url 'login'%}?next={{request.path}}" class="sidebar-nav">Login</a>
+                    </div>
+                </div>
+                <div class="row row-cols-1">
+                    <div class="col">
+                        <a href="{% url 'register' %}" class="sidebar-nav">Register</a>
+                    </div>
+                </div>
+    
+                {% endif %} 
+            </div>
+        </div>
             <div class="col">
                 {% block content %}
                 {% endblock %}
             </div>
-        </div>
+        
     </main>
 </body>
 
