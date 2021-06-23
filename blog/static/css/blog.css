@@ -5,6 +5,7 @@ h1 a, h2 a {
 
 body {
     padding-left: 15px;
+    
 }
 
 .page-header {
@@ -48,7 +49,7 @@ h4 {
 .top-menu:visited {
     color: #ffffff;
     float: right;
-    font-size: 26pt;
+    font-size: 12pt;
     margin-right: 20px;
 }
 

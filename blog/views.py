@@ -85,11 +85,11 @@ def add_comment_to_post(request, slug):
         post = get_object_or_404(Post,slug=slug)
         parent_id = request.POST.get('parent_id')
         if parent_id == "":
-            comment = Comment(post=post, author=author, text=text, created_date=timezone.now)
+            comment = Comment(post=post, author=author, text=text)
             comment.save()
         else:
             parent = get_object_or_404(Comment,id=parent_id)
-            comment = Comment(post=post,author=author,text=text,created_date=timezone.now,parent=parent)
+            comment = Comment(post=post,author=author,text=text,parent=parent)
             comment.save()
     
     return redirect('post_detail', slug=post.slug)

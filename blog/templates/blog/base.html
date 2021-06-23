@@ -3,11 +3,17 @@
 <html>
 
 <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <link href="//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{% static 'css/blog.css' %}">
 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/static/css/blog.css??{% now " U" %}">
     <title>Basic blog</title>
 </head>
 
@@ -15,18 +21,41 @@
     <header class="page-header">
         <div class="container">
             {% if user.is_authenticated %}
+            <div class="row row-cols-1">
+                <div class="col">
+                    <a class="top-menu" href="{% url 'profile' username=user.get_username %}">Welcome back, {{user.get_username}}!</a>
 
-            <li class = "sidebar-nav">User: {{ user.get_username }}</li>
-            <li><a href="{% url 'logout'%}?next={{request.path}}" class = "sidebar-nav">Logout</a></li>
-            <a href="{% url 'post_new' %}" class="top-menu">
-                {% include './icons/file-earmark-plus.svg' %}
-            </a>
+                </div>
+            </div>
+            <div class="row row-cols-1">
+                <div class="col">
+                    <a href="{% url 'logout'%}?next={{request.path}}" class="top-menu">Logout</a>
+                </div>
+            </div>
+
+            <div class="row row-cols-1">
+                <div class="col">
+                    <a href="{% url 'post_new' %}" class="top-menu">
+                        {% include './icons/file-earmark-plus.svg' %}
+                    </a>
+                </div>
+            </div>
+
             {% else %}
-            <li><a href="{% url 'login'%}?next={{request.path}}" class = "sidebar-nav">Login</a></li>
-            <li><a href="{% url 'register' %}">Register</a></li>
-            
+            <div class="row row-cols-1">
+                <div class="col">
+                    <a href="{% url 'login'%}?next={{request.path}}" class="top-menu">Login</a>
+                </div>
+            </div>
+            <div class="row row-cols-1">
+                <div class="col">
+                    <a href="{% url 'register' %}" class="top-menu">Register</a>
+                </div>
+            </div>
+
             {% endif %}
-            <h1><a href="/">Basic Blog</a></h1>
+
+            <h1 class="text-center"><a href="/">NoteSite: Save And Share Your Notes!</a></h1>
         </div>
     </header>
     <main class="container">
