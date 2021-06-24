@@ -1,7 +1,15 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-
+<div class="col col-3" id="usersidebar">
+<div class="sidenav">
+    <img src = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/98/OOjs_UI_icon_userAvatar.svg/1200px-OOjs_UI_icon_userAvatar.svg.png"
+    width="150" height="150">
+    <p class = "author">User : {{user.get_username}}</p>
+    <p class = "comments">Posts made: {{user.myposts.count}}</p>
+  </div>
+</div>
+<div class="col col-8">
 {% for post in posts %}
 <article class="post">
     <time class="date">
@@ -12,4 +20,7 @@
     <p>Comments: {{post.comments.count}}</p>
 </article>
 {% endfor %}
+</div>
 {% endblock %}
+
+

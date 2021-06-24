@@ -58,7 +58,7 @@ def profile(request, username = None):
     if User.objects.get(username=username):
         user = User.objects.get(username = username)
         posts = Post.objects.filter(author = user).order_by('-created_date')
-        return render(request, 'registration/dashboard.html',{'posts': posts})
+        return render(request, 'registration/dashboard.html',{'posts': posts,'user':user})
     
     else:
         return render("User not found")
