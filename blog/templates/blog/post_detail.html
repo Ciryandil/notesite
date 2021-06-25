@@ -3,6 +3,7 @@
 {% block content %}
 
 <article class="post">
+    
     {% if user == post.author %}
     <aside class="actions">
         <a class="btn btn-default" href="{% url 'post_edit' slug=post.slug %}">
@@ -13,15 +14,29 @@
             <span class="glyphicon glyphicon-remove"></span></a>
         {% endif %}
     </aside>
-    {% if post.published_date %}
+    
     <time class="date">
-        {{post.published_date}}
+        {{post.created_date}}
     </time>
-    {% endif %}
-    <h2>{{post.title}}</h2>
-    <p>{{ post.text|linebreaksbr }}</p>
-    <div>
+    
+    <h2 class="display-4">{{post.title}}</h2>
+    
+    <p>Description: {{ post.text|linebreaksbr }}</p>
+    <div class="note-link">
         <a class="btn btn-default" href="{% url 'get_note' slug=post.slug %}">Show Note</a>
+    </div>
+    <h5 class="display-5">Comments</h5>
+    <div>
+        {% if user.is_authenticated %}
+        <form action="post-comment" method="POST">
+            {% csrf_token %}
+            <input type="text" name="comment" placeholder="Enter comment here">
+
+            <input type="hidden" name="parent_id" value="">
+
+            <input type="submit" value="Comment" class="btn btn-sm btn-primary">
+        </form>
+        {% endif %}
     </div>
     {% for comment in comments %}
 
@@ -72,16 +87,5 @@
     {% empty %}
     <p>No comments here yet :(</p>
     {% endfor %}
-    <div>
-        {% if user.is_authenticated %}
-        <form action="post-comment" method="POST">
-            {% csrf_token %}
-            <input type="text" name="comment" placeholder="Enter comment here">
-
-            <input type="hidden" name="parent_id" value="">
-
-            <input type="submit" value="Comment">
-        </form>
-        {% endif %}
-    </div>
+    
     {% endblock %}
