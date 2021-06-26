@@ -8,6 +8,7 @@ from django.utils.text import slugify
 from django.core.files.storage import FileSystemStorage
 from .validators import validate_file_extension
 from django.contrib.auth.models import User
+from django.urls import reverse 
 
 
 class Post(models.Model):
@@ -27,6 +28,9 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('post_detail',args=[self.slug])
 
 
 class Comment(models.Model):

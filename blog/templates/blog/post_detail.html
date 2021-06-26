@@ -26,66 +26,20 @@
         <a class="btn btn-default" href="{% url 'get_note' slug=post.slug %}">Show Note</a>
     </div>
     <h5 class="display-5">Comments</h5>
+    
     <div>
         {% if user.is_authenticated %}
         <form action="post-comment" method="POST">
             {% csrf_token %}
             <input type="text" name="comment" placeholder="Enter comment here">
-
+    
             <input type="hidden" name="parent_id" value="">
-
+    
             <input type="submit" value="Comment" class="btn btn-sm btn-primary">
         </form>
         {% endif %}
     </div>
-    {% for comment in comments %}
+    {% include 'blog/comments.html' with comments=comments user=user csrf_token=csrf_token only %}
 
-    <div class="comment">
-        <div class="date">
-            {{ comment.created_date }}
-
-        </div>
-        <strong>{{ comment.author }}</strong>
-        <p>{{ comment.text|linebreaks }}</p>
-        {% if user.is_authenticated %}
-        <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#replyBox{{comment.id}}" aria-expanded="false" aria-controls="replyBox{{comment.id}}">
-            Reply
-        </button>
-        <div class="collapse" id="replyBox{{comment.id}}">
-            <div class="card card-body my-2">
-                <form action="post-comment" method="post">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="comment">Post a reply </label>
-                        <input type="text" class="form-control" name="comment" placeholder="Enter comment here">
-                        <input type="hidden" name="parent_id" value="{{comment.id}}">
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
-            </div>
-        </div>
-        {% endif %}
-        <div class="replies my-2 ">
-            {% for reply in comment.replies.all %}
-            <div class="row my-2">
-                
-                <div class="col-md-11">
-                    <div class="col-md-11 ">
-                        <b> {{reply.author}} </b> <span class="badge badge-secondary ">{{reply.created_date}}</span>
-                        <div>{{reply.text}}</div>
-                    </div>
-                    <br>
-                </div>
-            </div>
-            {% endfor %}
-         </div>
-
-
-    </div>
-
-    {% empty %}
-    <p>No comments here yet :(</p>
-    {% endfor %}
     
     {% endblock %}
