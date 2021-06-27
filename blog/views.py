@@ -1,4 +1,5 @@
 from django.contrib.auth import login
+from django.core.exceptions import ValidationError
 from django.http.response import FileResponse, Http404
 from django.shortcuts import render, get_object_or_404
 from .models import Post, Comment
@@ -9,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.text import slugify
+from taggit.models import Tag
 # Create your views here.
 
 def post_list(request):
@@ -31,8 +33,11 @@ def post_new(request):
         if form.is_valid():
             post = form.save(commit = False)
             post.author = request.user
-            post.publish()
+            post.created_date = timezone.now()
+            post.slug = slugify(post.author.username + '/' + post.title + str(post.created_date))
             post.save()
+            
+            form.save_m2m()
             return redirect('post_detail', slug = post.slug)
     else:
         form = PostForm()
@@ -47,6 +52,7 @@ def post_edit(request, slug):
             post.author = request.user
             post.created_date = timezone.now()
             post.save()
+            form.save_m2m()
             return redirect('post_detail', slug = post.slug)
     else:
         

@@ -1,0 +1,7 @@
+Things to do:
+
+1. Make form inform user if their post title has been used before - fixed slug so that user can have multiple posts with same title but different date time
+2. Delete media if post deleted
+3. Search by title and search by tags
+4. User profile and following
+5. Rating for posts 

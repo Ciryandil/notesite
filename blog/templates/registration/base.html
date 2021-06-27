@@ -15,17 +15,22 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/static/css/blog.css??{% now " U" %}">
     <script src="/static/js/blog.js??{% now " U" %}"></script>
-    <script id="dsq-count-scr" src="//notesite-1.disqus.com/count.js" async></script>
+    
     <title>Notesite</title>
 </head>
-
+<header class="page-header">
+    
+    <div class="container">
+                <h1 class="text-center"><a href="/">NoteSite: Save And Share Your Notes!</a></h1>
+    </div>
+</header>
 <body>
        <main class="container">
         
-        <div class="row">
+        
                 {% block content %}
                 {% endblock %}
-            </div>
+            
     </main>
 </body>
 

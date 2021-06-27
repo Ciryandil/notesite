@@ -9,7 +9,7 @@ from django.core.files.storage import FileSystemStorage
 from .validators import validate_file_extension
 from django.contrib.auth.models import User
 from django.urls import reverse 
-
+from taggit.managers import TaggableManager
 
 class Post(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete = models.CASCADE, related_name='myposts')
@@ -18,6 +18,10 @@ class Post(models.Model):
     created_date = models.DateTimeField(default = timezone.now)
     note = models.FileField(validators=[validate_file_extension])
     slug = models.SlugField(max_length=255, unique=True)
+    tags = TaggableManager(blank=True)
+
+    
+
 
     def publish(self):
         self.created_date = timezone.now()

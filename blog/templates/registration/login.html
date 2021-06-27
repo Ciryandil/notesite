@@ -8,13 +8,17 @@
 
   {% if next %}
     {% if user.is_authenticated %}
+    <div class="row">
       <p>Your account doesn't have access to this page. To proceed,
       please login with an account that has access.</p>
+    </div>
     {% else %}
+    <div class="row">
       <p>Please login to see this page.</p>
+    </div>
     {% endif %}
   {% endif %}
-
+    <div class="row">
   <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
     <table>
@@ -30,7 +34,7 @@
     <input type="submit" value="login" />
     <input type="hidden" name="next" value="{{ next }}" />
   </form>
-
+</div>
   
 
 {% endblock %} 

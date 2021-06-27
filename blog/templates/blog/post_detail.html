@@ -22,6 +22,11 @@
     <h2 class="display-4">{{post.title}}</h2>
     
     <p>Description: {{ post.text|linebreaksbr }}</p>
+    <div style="display:flex">
+        {% for tag in post.tags.all %}
+        <a href="" class="mr-2 mb-2 badge badge-info "><h6>{{ tag }}</h6></a>
+        {% endfor %}
+    </div>
     <div class="note-link">
         <a class="btn btn-default" href="{% url 'get_note' slug=post.slug %}">Show Note</a>
     </div>
