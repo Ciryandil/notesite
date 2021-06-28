@@ -11,11 +11,13 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.utils.text import slugify
 from taggit.models import Tag
+from django.db.models import Q
+from django.views.generic import ListView
 # Create your views here.
 
 def post_list(request):
     posts = Post.objects.all().order_by('-created_date')
-    return render(request, 'blog/post_list.html',{'posts': posts})
+    return render(request, 'blog/post_list.html',{'object_list': posts})
 
 def post_detail(request, slug):
    
@@ -64,7 +66,7 @@ def profile(request, username = None):
     if User.objects.get(username=username):
         user = User.objects.get(username = username)
         posts = Post.objects.filter(author = user).order_by('-created_date')
-        return render(request, 'registration/dashboard.html',{'posts': posts,'user':user})
+        return render(request, 'registration/dashboard.html',{'object_list': posts,'user':user})
     
     else:
         return render("User not found")
@@ -113,5 +115,42 @@ def get_note(request, slug):
         return FileResponse(open(path,'rb'), content_type = 'application/pdf')
     except:
         raise Http404()
+
+def get_tagged(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    posts = Post.objects.filter(tags=tag)
+
+    return render(request,'blog/post_list.html',{'object_list':posts})
+
+def get_tagged_user(request, username, slug):
+    tag = get_object_or_404(Tag,slug=slug)
+    user = get_object_or_404(User,username=username)
+    posts = Post.objects.filter(tags=tag,author=user)
+
+    return render(request, 'registration/dashboard.html',{'object_list':posts, 'user':user})
+
+class SearchView(ListView):
+    model = Post
+    template_name = 'post_list.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('query')
+        tags = Tag.objects.filter(slug__icontains=query)
+        object_list = Post.objects.filter(Q(title__icontains=query) | Q(tags__in=tags))
+
+        return object_list
+
+class SearchUserView(ListView):
+    model = Post
+    template_name = 'dashboard.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('query')
+        user  = get_object_or_404(User,username=self.kwargs['username'])
+        tags = Tag.objects.filter(slug__icontains=query)
+        object_list = Post.objects.filter(Q(author=user) & (Q(title__icontains=query) | Q(tags__in=tags)))
+
+        return object_list
+
 
     

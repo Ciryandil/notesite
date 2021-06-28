@@ -8,7 +8,14 @@
 
 </div>
 
-{% for post in posts %}
+<div class="input-group row justify-content-center">
+    <form class="form-inline my-2 my-lg-0" action="{% url 'search_all' %}", method="GET">
+        <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+  </div>
+
+{% for post in object_list %}
 <article class="post">
     <time class="date">
         {{ post.created_date }}
@@ -16,10 +23,10 @@
     <h2><a href="{% url 'post_detail' slug=post.slug %}">{{ post.title }}</a></h2>
     <div style="display:flex">
         {% for tag in post.tags.all %}
-        <a href="" class="mr-2 mb-2 badge badge-info"><h6>{{ tag }}</h6></a>
+        <a href="{% url 'get_tagged' slug=tag.slug %}" class="mr-2 mb-2 badge badge-info"><h6>{{ tag }}</h6></a>
         {% endfor %}
     </div>
-    <h6><a href = {% url 'profile' username=post.author %} class="author">{{post.author}}</a></h6>
+    <h6><a href = "{% url 'profile' username=post.author %}" class="author">{{post.author}}</a></h6>
     <p>{{ post.text|linebreaksbr }}</p>
     <p class="comments">Comments: {{post.comments.count}}</p> 
 </article>
