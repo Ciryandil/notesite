@@ -13,7 +13,7 @@ urlpatterns = [
     path('register/', views.register, name = 'register'),
     path('post/<slug:slug>/post-comment', views.add_comment_to_post, name='add_comment_to_post'),
     path('post/<slug:slug>/remove/', views.post_remove, name='post_remove'),
-    path('post/<slug:slug>/note/', views.get_note,name='get_note'),
+    path('post/<slug:slug>/note/', views.get_note, name='get_note'),
     path('post/tag/<slug:slug>', views.get_tagged, name='get_tagged'),
  
 
