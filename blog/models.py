@@ -49,3 +49,17 @@ class Comment(models.Model):
         ordering = ('-created_date',)
     def __str__(self):
         return self.text
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    followers = models.ManyToManyField('self',  blank=True, related_name='following', symmetrical=False)
+    
+    created_date = models.DateTimeField(default = timezone.now)
+    dp = models.ImageField(upload_to='media/img/', default = 'media/img/person-circle.svg')
+
+
+class Rating(models.Model):
+    post = models.ForeignKey('blog.Post', on_delete=models.CASCADE, related_name = 'ratings')
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    score = models.IntegerField(default=0)
