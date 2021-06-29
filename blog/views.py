@@ -2,10 +2,10 @@ from django.contrib.auth import login
 from django.core.exceptions import ValidationError
 from django.http.response import FileResponse, Http404
 from django.shortcuts import render, get_object_or_404
-from .models import Post, Comment
+from .models import Post, Comment, UserProfile
 from django.utils import timezone
 from django.shortcuts import redirect
-from .forms import PostForm, UserRegistrationForm, CommentForm
+from .forms import PostForm, UserProfileForm, UserRegistrationForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -151,6 +151,22 @@ class SearchUserView(ListView):
         object_list = Post.objects.filter(Q(author=user) & (Q(title__icontains=query) | Q(tags__in=tags)))
 
         return object_list
+
+def set_picture(request, username = None):
+   
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, request.FILES)
+        if form.is_valid:
+            userprof = form.save(commit = False)
+            userprof.user = request.user
+            userprof.created_date = request.user.date_joined
+            userprof.save()
+            
+            return redirect('profile', username = username)
+    else:
+        
+        form = UserProfileForm()
+    return render(request,'blog/profilepicture.html',{'form': form})
 
 
     

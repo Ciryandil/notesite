@@ -56,7 +56,7 @@ class UserProfile(models.Model):
     followers = models.ManyToManyField('self',  blank=True, related_name='following', symmetrical=False)
     
     created_date = models.DateTimeField(default = timezone.now)
-    dp = models.ImageField(upload_to='media/img/', default = 'media/img/person-circle.svg')
+    dp = models.ImageField(upload_to='images', default = 'default.png')
 
 
 class Rating(models.Model):
