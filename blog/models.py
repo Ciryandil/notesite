@@ -53,7 +53,7 @@ class Comment(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    followers = models.ManyToManyField('self',  blank=True, related_name='following', symmetrical=False)
+    following = models.ManyToManyField('self',  blank=True, related_name='followers', symmetrical=False)
     
     created_date = models.DateTimeField(default = timezone.now)
     dp = models.ImageField(upload_to='images', default = 'default.png')

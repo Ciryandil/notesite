@@ -1,8 +1,8 @@
-{% extends 'blog/base.html'}
+{% extends 'blog/base.html' %}
 
 {% block content %} 
 
-<h2> Set Your Profile Picture! </h2>
+<h2 style="text-align:center"> Set Your Profile Picture! </h2>
 <form method = "POST" enctype="multipart/form-data" class = "post-form"> {%csrf_token %}
     {{form.as_p}}
 

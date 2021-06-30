@@ -13,6 +13,7 @@ from django.utils.text import slugify
 from taggit.models import Tag
 from django.db.models import Q
 from django.views.generic import ListView
+import datetime
 # Create your views here.
 
 def post_list(request):
@@ -66,7 +67,9 @@ def profile(request, username = None):
     if User.objects.get(username=username):
         user = User.objects.get(username = username)
         posts = Post.objects.filter(author = user).order_by('-created_date')
-        return render(request, 'registration/dashboard.html',{'object_list': posts,'user':user})
+        date_joined = user.date_joined.date()
+        last_active = user.last_login
+        return render(request, 'registration/dashboard.html',{'object_list': posts,'user':user,'date_joined':date_joined,'last_active':last_active})
     
     else:
         return render("User not found")
@@ -154,8 +157,14 @@ class SearchUserView(ListView):
 
 def set_picture(request, username = None):
    
-    if request.method == "POST":
-        form = UserProfileForm(request.POST, request.FILES)
+   try:
+    userprofile = request.user.userprofile
+   except UserProfile.DoesNotExist:
+       userprofile = UserProfile(user=request.user)
+
+
+   if request.method == "POST":
+        form = UserProfileForm(request.POST, request.FILES, instance = userprofile)
         if form.is_valid:
             userprof = form.save(commit = False)
             userprof.user = request.user
@@ -163,10 +172,20 @@ def set_picture(request, username = None):
             userprof.save()
             
             return redirect('profile', username = username)
-    else:
+   else:
         
-        form = UserProfileForm()
-    return render(request,'blog/profilepicture.html',{'form': form})
+        form = UserProfileForm(instance=userprofile)
+   return render(request,'blog/profilepicture.html',{'form': form})
+
+def set_follow(request, username = None):
+    if User.objects.get(username=username):
+        user = User.objects.get(username = username)
+        profile1 = user.userprofile
+        request.user.userprofile.following.add(profile1)
+
+        return redirect('profile', username=user.get_username)
+    else:
+        return render("User not found")
 
 
     

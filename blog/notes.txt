@@ -3,6 +3,5 @@ Things to do:
 1. Make form inform user if their post title has been used before - fixed slug so that user can have multiple posts with same title but different date time
 2. Delete media if post deleted - fixed with django cleanup
 3. Search by title and search by tags - done, basics implemented. for more advanced, need to learn ajax
-
 4. User profile and following and fix user registration form
 5. Rating for posts 
