@@ -12,6 +12,7 @@ urlpatterns = [
     path('profile/<username>', views.profile, name='profile'),
     path('profile/<username>/search', views.SearchUserView.as_view(), name='search_user'),
     path('profile/<username>/follow', views.set_follow, name = 'follow_user'),
+    path('profile/<username>/unfollow', views.set_unfollow, name = 'unfollow_user'),
     path('profile/<username>/set_dp', views.set_picture, name = 'set_dp'),
     path('profile/<username>/<slug:slug>',views.get_tagged_user, name='get_tagged_user'),
     path('register/', views.register, name = 'register'),

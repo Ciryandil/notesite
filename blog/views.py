@@ -69,7 +69,11 @@ def profile(request, username = None):
         posts = Post.objects.filter(author = user).order_by('-created_date')
         date_joined = user.date_joined.date()
         last_active = user.last_login
-        return render(request, 'registration/dashboard.html',{'object_list': posts,'user':user,'date_joined':date_joined,'last_active':last_active})
+        follows = False
+        if request.user.userprofile.following.filter(user=user).exists():
+            follows = True
+        return render(request, 'registration/dashboard.html',{'object_list': posts,'member':user,'date_joined':date_joined,
+        'last_active':last_active, 'follows':follows})
     
     else:
         return render("User not found")
@@ -139,7 +143,7 @@ class SearchView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('query')
         tags = Tag.objects.filter(slug__icontains=query)
-        object_list = Post.objects.filter(Q(title__icontains=query) | Q(tags__in=tags))
+        object_list = Post.objects.filter(Q(title__icontains=query) | Q(tags__in=tags)).distinct()
 
         return object_list
 
@@ -151,7 +155,7 @@ class SearchUserView(ListView):
         query = self.request.GET.get('query')
         user  = get_object_or_404(User,username=self.kwargs['username'])
         tags = Tag.objects.filter(slug__icontains=query)
-        object_list = Post.objects.filter(Q(author=user) & (Q(title__icontains=query) | Q(tags__in=tags)))
+        object_list = Post.objects.filter(Q(author=user) & (Q(title__icontains=query) | Q(tags__in=tags))).distinct()
 
         return object_list
 
@@ -178,12 +182,23 @@ def set_picture(request, username = None):
    return render(request,'blog/profilepicture.html',{'form': form})
 
 def set_follow(request, username = None):
-    if User.objects.get(username=username):
+    if User.objects.filter(username=username).exists():
         user = User.objects.get(username = username)
         profile1 = user.userprofile
         request.user.userprofile.following.add(profile1)
 
-        return redirect('profile', username=user.get_username)
+        return redirect('profile', username=username)
+    else:
+        return render("User not found")
+
+def set_unfollow(request, username = None):
+    if User.objects.filter(username=username).exists():
+        user = User.objects.get(username=username)
+        profile1 = user.userprofile
+        request.user.userprofile.following.remove(profile1)
+
+        return redirect('profile', username=username)
+
     else:
         return render("User not found")
 

@@ -29,5 +29,7 @@ $RECYCLE.BIN/
 secret.py
 
 #Media
-
+/media/
 *.pdf
+*.jpg
+*.png
