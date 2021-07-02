@@ -1,0 +1,40 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    
+        <h2 class="display-4">Latest Posts for topic: {{tag}}!</h2>
+        
+</div>
+
+<div class="input-group row justify-content-center">
+    {% if user.is_authenticated %}
+    {% if follows == False %}
+        <a class="btn btn-primary" href="{% url 'follow_topic' slug=tag %}">Follow Topic</a>
+        {% else %} 
+        <a class="btn btn-primary" href="{% url 'unfollow_topic' slug=tag %}">Unfollow Topic</a>
+        {% endif %}
+    {% endif %}
+    <form class="form-inline my-2 my-lg-0" action="{% url 'search_all' %}", method="GET">
+        <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+  </div>
+
+{% for post in object_list %}
+<article class="post">
+    <time class="date">
+        {{ post.created_date }}
+    </time>
+    <h2><a href="{% url 'post_detail' slug=post.slug %}">{{ post.title }}</a></h2>
+    <div style="display:flex">
+        {% for tag in post.tags.all %}
+        <a href="{% url 'get_tagged' slug=tag.slug %}" class="mr-2 mb-2 badge badge-info"><h6>{{ tag }}</h6></a>
+        {% endfor %}
+    </div>
+    <h6><a href = "{% url 'profile' username=post.author %}" class="author">{{post.author}}</a></h6>
+    <p>{{ post.text|linebreaksbr }}</p>
+    <p class="comments">Comments: {{post.comments.count}}</p> 
+</article>
+{% endfor %}
+{% endblock %}  

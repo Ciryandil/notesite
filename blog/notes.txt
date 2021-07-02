@@ -4,4 +4,4 @@ Things to do:
 2. Delete media if post deleted - fixed with django cleanup
 3. Search by title and search by tags - done, basics implemented. for more advanced, need to learn ajax
 4. User profile and following and fix user registration form - user profile done ( weird bug of abstractbaseuser to be analysed)
-5. Rating for posts 
+5. Rating for posts - changing to upvote system

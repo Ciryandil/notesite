@@ -32,6 +32,7 @@
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         {% if user.is_authenticated %}
         <a class="sidebar-nav" href="{% url 'profile' username=user.get_username %}">Welcome back, {{user.get_username}}!</a>
+        <a href="{% url 'feed_list' username=user.get_username %}">Go to my feed</a>
         <a href="{% url 'post_new' %}" class="sidebar-nav">Make a new post
             {% include 'blog/icons/file-earmark-plus.svg' %}
         </a>
@@ -43,7 +44,7 @@
     </div>
 
     <div class="input-group row justify-content-center">
-        <form class="form-inline my-2 my-lg-0" action="{% url 'search_user' username=user.get_username %}", method="GET">
+        <form class="form-inline my-2 my-lg-0" action="{% url 'search_user' username=member.get_username %}", method="GET">
             <input class="form-control mr-sm-2" type="text" name="query" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
           </form>
@@ -74,6 +75,7 @@
                     <p class = "comments">Following : {{member.userprofile.following.count}}</p>
                     <p class = "comments">Posts made: {{member.myposts.count}}</p>
                     <p class = "comments">Last active: {{last_active}}</p>
+                   
                     
                 </div>
                 <div class="col col-8" id="postlist">

@@ -17,8 +17,10 @@ import datetime
 # Create your views here.
 
 def post_list(request):
-    posts = Post.objects.all().order_by('-created_date')
-    return render(request, 'blog/post_list.html',{'object_list': posts})
+    
+    
+        posts = Post.objects.all().order_by('-created_date')
+        return render(request, 'blog/post_list.html',{'object_list': posts})
 
 def post_detail(request, slug):
    
@@ -126,15 +128,19 @@ def get_note(request, slug):
 def get_tagged(request, slug):
     tag = get_object_or_404(Tag, slug=slug)
     posts = Post.objects.filter(tags=tag)
-
-    return render(request,'blog/post_list.html',{'object_list':posts})
+    follows = False
+    if request.user.is_authenticated:
+        
+        if request.user.userprofile.tags.filter(slug=slug).exists():
+            follows = True
+    return render(request,'blog/tagged_posts.html',{'object_list':posts,'tag':slug, 'follows':follows})
 
 def get_tagged_user(request, username, slug):
     tag = get_object_or_404(Tag,slug=slug)
     user = get_object_or_404(User,username=username)
     posts = Post.objects.filter(tags=tag,author=user)
 
-    return render(request, 'registration/dashboard.html',{'object_list':posts, 'user':user})
+    return render(request, 'registration/dashboard.html',{'object_list':posts, 'member':user})
 
 class SearchView(ListView):
     model = Post
@@ -143,8 +149,11 @@ class SearchView(ListView):
     def get_queryset(self):
         query = self.request.GET.get('query')
         tags = Tag.objects.filter(slug__icontains=query)
-        object_list = Post.objects.filter(Q(title__icontains=query) | Q(tags__in=tags)).distinct()
-
+        queryset = Post.objects.filter(Q(title__icontains=query) | Q(tags__in=tags)).distinct()
+        #follows = False 
+        # if self.request.user.userprofile.tags.filter(tags=query).exists():
+        #     follows = True
+        object_list = queryset
         return object_list
 
 class SearchUserView(ListView):
@@ -155,8 +164,13 @@ class SearchUserView(ListView):
         query = self.request.GET.get('query')
         user  = get_object_or_404(User,username=self.kwargs['username'])
         tags = Tag.objects.filter(slug__icontains=query)
-        object_list = Post.objects.filter(Q(author=user) & (Q(title__icontains=query) | Q(tags__in=tags))).distinct()
-
+        query = Post.objects.filter(Q(author=user) & (Q(title__icontains=query) | Q(tags__in=tags))).distinct()
+        # date_joined = user.date_joined.date()
+        # last_active = user.last_login
+        # follows = False
+        # if self.request.user.userprofile.following.filter(user=user).exists():
+        #     follows = True
+        object_list = query
         return object_list
 
 def set_picture(request, username = None):
@@ -201,6 +215,35 @@ def set_unfollow(request, username = None):
 
     else:
         return render("User not found")
+
+def add_topic(request, slug):
+    tag = get_object_or_404(Tag,slug=slug)
+    request.user.userprofile.tags.add(tag)
+
+    return redirect(get_tagged,slug = slug)
+
+def remove_topic(request, slug):
+    tag = get_object_or_404(Tag,slug=slug)
+    request.user.userprofile.tags.remove(tag)
+
+    return redirect(get_tagged,slug = slug)
+
+def create_feed(request,username):
+
+    user = get_object_or_404(User, username=username)
+    tags = user.userprofile.tags.all()
+    following = user.userprofile.following.all()
+        
+    posts = Post.objects.filter(tags__in=tags)
+        
+    for userprof in following:
+        member = userprof.user
+        followed_posts  = Post.objects.filter(author = member)
+        posts = posts | followed_posts
+    posts = posts | Post.objects.filter(author = user)
+    posts = posts.order_by('-created_date')
+    return render(request, 'blog/post_list.html',{'object_list': posts})
+    
 
 
     
