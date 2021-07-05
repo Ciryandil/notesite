@@ -1,0 +1,27 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    
+        <h2 class="display-4">{{title}}</h2>
+    
+
+</div>
+
+{% for userprofile in user_list %}
+<article class="post">
+    <div class="row">
+    <div class = "col-md-2">
+        <img class="rounded mx-auto d-block w-100 border border-dark p-2" src = "{{userprofile.dp.url}}" height = "80" width = "80">
+    </div>
+      <div class="col-md-8"><h2><a href="{% url 'profile' username=userprofile.user.get_username %}">{{ userprofile.user.get_username }}</a></h2>
+    
+    
+    <div><h6>Posts: {{userprofile.user.myposts.count}}</h6></div>
+</div>
+</div>
+</article>
+{% endfor %}
+
+{% endblock %}

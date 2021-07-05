@@ -30,6 +30,11 @@
     <div class="note-link">
         <a class="btn btn-default" href="{% url 'get_note' slug=post.slug %}">Show Note</a>
     </div>
+    <div>
+        {% if user.is_authenticated %} 
+       
+        {% endif %}
+    </div>
     <h5 class="display-5">Comments</h5>
     
     <div>

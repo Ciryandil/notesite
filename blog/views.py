@@ -16,6 +16,8 @@ from django.views.generic import ListView
 import datetime
 # Create your views here.
 
+
+# *********************************POST RELATED VIEWS**********************************************************************
 def post_list(request):
     
     
@@ -64,36 +66,6 @@ def post_edit(request, slug):
         form = PostForm(instance = post)
     return render(request,'blog/post_edit.html',{'form': form})
 
-
-def profile(request, username = None):
-    if User.objects.get(username=username):
-        user = User.objects.get(username = username)
-        posts = Post.objects.filter(author = user).order_by('-created_date')
-        date_joined = user.date_joined.date()
-        last_active = user.last_login
-        follows = False
-        if request.user.userprofile.following.filter(user=user).exists():
-            follows = True
-        return render(request, 'registration/dashboard.html',{'object_list': posts,'member':user,'date_joined':date_joined,
-        'last_active':last_active, 'follows':follows})
-    
-    else:
-        return render("User not found")
-
-def register(request):
-    if request.method == "GET":
-        
-        return render(request, "registration/register.html", {'form' : UserRegistrationForm})
-    elif request.method == "POST":
-        
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit = True)
-            login(request, user)
-            return redirect('profile', username = user.username)
-
-    return redirect('register')
-
 def add_comment_to_post(request, slug):
     
     if request.method == "POST":
@@ -125,53 +97,39 @@ def get_note(request, slug):
     except:
         raise Http404()
 
-def get_tagged(request, slug):
-    tag = get_object_or_404(Tag, slug=slug)
-    posts = Post.objects.filter(tags=tag)
-    follows = False
-    if request.user.is_authenticated:
-        
-        if request.user.userprofile.tags.filter(slug=slug).exists():
+# ****************************************************************************************************************************
+
+
+#**********************************USER RELATED VIEWS*************************************************************************
+
+def profile(request, username = None):
+    if User.objects.get(username=username):
+        user = User.objects.get(username = username)
+        posts = Post.objects.filter(author = user).order_by('-created_date')
+        date_joined = user.date_joined.date()
+        last_active = user.last_login
+        follows = False
+        if request.user.is_authenticated and request.user.userprofile.following.filter(user=user).exists():
             follows = True
-    return render(request,'blog/tagged_posts.html',{'object_list':posts,'tag':slug, 'follows':follows})
+        return render(request, 'registration/dashboard.html',{'object_list': posts,'member':user, 'follows':follows})
+    
+    else:
+        return render("User not found")
 
-def get_tagged_user(request, username, slug):
-    tag = get_object_or_404(Tag,slug=slug)
-    user = get_object_or_404(User,username=username)
-    posts = Post.objects.filter(tags=tag,author=user)
-
-    return render(request, 'registration/dashboard.html',{'object_list':posts, 'member':user})
-
-class SearchView(ListView):
-    model = Post
-    template_name = 'post_list.html'
-
-    def get_queryset(self):
-        query = self.request.GET.get('query')
-        tags = Tag.objects.filter(slug__icontains=query)
-        queryset = Post.objects.filter(Q(title__icontains=query) | Q(tags__in=tags)).distinct()
-        #follows = False 
-        # if self.request.user.userprofile.tags.filter(tags=query).exists():
-        #     follows = True
-        object_list = queryset
-        return object_list
-
-class SearchUserView(ListView):
-    model = Post
-    template_name = 'dashboard.html'
-
-    def get_queryset(self):
-        query = self.request.GET.get('query')
-        user  = get_object_or_404(User,username=self.kwargs['username'])
-        tags = Tag.objects.filter(slug__icontains=query)
-        query = Post.objects.filter(Q(author=user) & (Q(title__icontains=query) | Q(tags__in=tags))).distinct()
-        # date_joined = user.date_joined.date()
-        # last_active = user.last_login
-        # follows = False
-        # if self.request.user.userprofile.following.filter(user=user).exists():
-        #     follows = True
-        object_list = query
-        return object_list
+def register(request):
+    
+    if request.method == "POST":
+        
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit = True)
+            userprofile = UserProfile(user = user)
+            userprofile.save()
+            login(request, user)
+            return redirect('profile', username = user.username)
+    else:
+        form = UserRegistrationForm()
+    return render(request,'registration/register.html',{'form':form})
 
 def set_picture(request, username = None):
    
@@ -243,7 +201,73 @@ def create_feed(request,username):
     posts = posts | Post.objects.filter(author = user)
     posts = posts.order_by('-created_date')
     return render(request, 'blog/post_list.html',{'object_list': posts})
-    
+
+def get_userlist(request, username, slug):
+
+    user = get_object_or_404(User, username=username)
+    userlist = None
+    title = None
+    if slug == "following":
+        userlist = user.userprofile.following.all()
+        title = "People Followed"
+    else:
+        userlist = user.userprofile.followers.all()
+        title = "Followers"
+    return render(request, 'blog/UserList.html', {'title':title, 'user_list':userlist})        
+
+
+# ************************************************************************************************************************
+
+#***********************************************TAG AND SEARCH RELATED VIEWS**********************************************
+
+def get_tagged(request, slug):
+    tag = get_object_or_404(Tag, slug=slug)
+    posts = Post.objects.filter(tags=tag)
+    follows = False
+    if request.user.is_authenticated:
+        
+        if request.user.userprofile.tags.filter(slug=slug).exists():
+            follows = True
+    return render(request,'blog/tagged_posts.html',{'object_list':posts,'tag':slug, 'follows':follows})
+
+def get_tagged_user(request, username, slug):
+    tag = get_object_or_404(Tag,slug=slug)
+    user = get_object_or_404(User,username=username)
+    posts = Post.objects.filter(tags=tag,author=user)
+
+    return render(request, 'registration/dashboard.html',{'object_list':posts, 'member':user})
+
+class SearchView(ListView):
+    model = Post
+    template_name = 'post_list.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('query')
+        tags = Tag.objects.filter(slug__icontains=query)
+        queryset = Post.objects.filter(Q(title__icontains=query) | Q(tags__in=tags)).distinct()
+        #follows = False 
+        # if self.request.user.userprofile.tags.filter(tags=query).exists():
+        #     follows = True
+        object_list = queryset
+        return object_list
+
+class SearchUserView(ListView):
+    model = Post
+    template_name = 'dashboard.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('query')
+        user  = get_object_or_404(User,username=self.kwargs['username'])
+        tags = Tag.objects.filter(slug__icontains=query)
+        query = Post.objects.filter(Q(author=user) & (Q(title__icontains=query) | Q(tags__in=tags))).distinct()
+        # date_joined = user.date_joined.date()
+        # last_active = user.last_login
+        # follows = False
+        # if self.request.user.userprofile.following.filter(user=user).exists():
+        #     follows = True
+        object_list = query
+        return object_list
+
 
 
     

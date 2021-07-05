@@ -15,7 +15,7 @@
         crossorigin="anonymous"></script>
     <link rel="stylesheet" href="/static/css/blog.css??{% now " U" %}">
     <script src="/static/js/blog.js??{% now " U" %}"></script>
-    <script id="dsq-count-scr" src="//notesite-1.disqus.com/count.js" async></script>
+    
     <title>Notesite</title>
 </head>
 
@@ -64,17 +64,23 @@
                     {% endif %}
                     <p class = "author">User : {{member.get_username}}</p>
                     {% if member != user %}
+                    {% if user.is_authenticated %}
                     {% if follows == False %}
                     <a class = "btn btn-primary" href="{% url 'follow_user' username=member.get_username %}">Follow</a>
                     {% else %} 
                     <a class = "btn btn-primary" href="{% url 'unfollow_user' username=member.get_username %}">Unfollow</a>
                     {% endif %}
                     {% endif %}
-                    <p class = "comments">Date joined: {{date_joined}}</p>
-                    <p class = "comments">Followers : {{member.userprofile.followers.count}}</p>
-                    <p class = "comments">Following : {{member.userprofile.following.count}}</p>
+                    {% endif %}
+                    <p class = "comments">Date joined: {{member.date_joined.date}}</p>
+                    <p class = "comments"><a class = "comments" href="{% url 'get_users' username=member.get_username slug="followers" %}">
+                        Followers : {{member.userprofile.followers.count}}
+                    </a></p>
+                    <pclass = "comments"><a class = "comments" href="{% url 'get_users' username=member.get_username slug="following" %}">
+                        Following : {{member.userprofile.following.count}}
+                    </a></p>
                     <p class = "comments">Posts made: {{member.myposts.count}}</p>
-                    <p class = "comments">Last active: {{last_active}}</p>
+                    <p class = "comments">Last active: {{member.last_login}}</p>
                    
                     
                 </div>

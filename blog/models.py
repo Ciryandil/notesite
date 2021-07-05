@@ -59,7 +59,7 @@ class UserProfile(models.Model):
     dp = models.ImageField(upload_to='images', default = 'default.png')
 
 
-class Rating(models.Model):
-    post = models.ForeignKey('blog.Post', on_delete=models.CASCADE, related_name = 'ratings')
+class Vote(models.Model):
+    post = models.ForeignKey('blog.Post', on_delete=models.CASCADE, related_name = 'votes')
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)

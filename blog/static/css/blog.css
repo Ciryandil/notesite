@@ -68,8 +68,8 @@ h4 {
 
 .top-menu,
 .top-menu:hover,
-.top-menu:visited,
- {
+.top-menu:visited
+{
     color: #ffffff;
     float: right;
     font-size: 12pt;
@@ -211,3 +211,13 @@ body{
     margin-bottom: 30px;
 }
 
+.reply
+{
+    padding-left: 30px;
+}
+
+img 
+{
+    width: 100%;
+    height: auto;
+}

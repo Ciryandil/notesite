@@ -4,8 +4,18 @@
         {{ comment.created_date }}
 
     </div>
-    <strong>{{ comment.author }}</strong>
+    <div class = "row my-3">
+    <div class="col-md-1">
+        <img  src = "{{comment.author.userprofile.dp.url}}" height = "80" width = "80">
+    </div>
+          <div class="col-md-10">  
+            <h5><strong>{{ comment.author }}</strong></h5>
+        </div>
+    </div>
+        <div>
     <p>{{ comment.text|linebreaks }}</p>
+</div>
+
     {% if user.is_authenticated %}
     <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#replyBox{{comment.id}}" aria-expanded="false" aria-controls="replyBox{{comment.id}}">
         Reply
@@ -30,8 +40,8 @@
         {% for reply in comment.replies.all %}
         <div class="row my-2">
             
-            <div class="col-md-11">
-                <div class="col-md-11 ">
+            <div class="col-md-12">
+                <div class="col-md-12 class = "reply">
                     {% include 'blog/comments.html' with comments=comment.replies.all user=user csrf_token=csrf_token only %}
                 </div>
                 <br>

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import Post, Comment, UserProfile
-
+from django.contrib.auth.models import User
 class PostForm(forms.ModelForm):
 
     
@@ -12,8 +12,7 @@ class PostForm(forms.ModelForm):
 class UserRegistrationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
-        fields = UserCreationForm.Meta.fields
-
+        model = User
 
 class CommentForm(forms.ModelForm):
 
@@ -26,4 +25,5 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('dp',)
+        
 
