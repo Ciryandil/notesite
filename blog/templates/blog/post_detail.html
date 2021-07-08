@@ -28,7 +28,7 @@
         {% endfor %}
     </div>
     <div class="note-link">
-        <a class="btn btn-default" href="{% url 'get_note' slug=post.slug %}">Show Note</a>
+        <a class="btn btn-default" href="{{post.note.url}}">Show Note</a>
     </div>
     <div>
         {% if user.is_authenticated %} 

@@ -14,6 +14,7 @@ from taggit.models import Tag
 from django.db.models import Q
 from django.views.generic import ListView
 import datetime
+
 # Create your views here.
 
 
@@ -30,9 +31,9 @@ def post_detail(request, slug):
     post = get_object_or_404(Post, slug=slug)
     comments = Comment.objects.filter(post=post, parent=None)
     
-    path = '/media/' + post.note.name
+    
     return render(request,
-                  'blog/post_detail.html',{'post':post, 'url':path, 'comments': comments})
+                  'blog/post_detail.html',{'post':post, 'comments': comments})
 
 def post_new(request):
     if request.method == "POST":
@@ -91,7 +92,7 @@ def post_remove(request, slug):
 
 def get_note(request, slug):
     post = get_object_or_404(Post, slug = slug)
-    path = './media/'+post.note.name
+    path = post.note.url
     try:
         return FileResponse(open(path,'rb'), content_type = 'application/pdf')
     except:

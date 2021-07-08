@@ -6,7 +6,7 @@ from django.conf import settings
 from django.utils import timezone
 from django.utils.text import slugify 
 from django.core.files.storage import FileSystemStorage
-from .validators import validate_file_extension
+from .validators import validate_file_extension, validate_image_extension
 from django.contrib.auth.models import User
 from django.urls import reverse 
 from taggit.managers import TaggableManager
@@ -16,7 +16,7 @@ class Post(models.Model):
     title = models.CharField(max_length = 200)
     text = models.TextField()
     created_date = models.DateTimeField(default = timezone.now)
-    note = models.FileField(validators=[validate_file_extension])
+    note = models.FileField(upload_to='media', validators=[validate_file_extension])
     slug = models.SlugField(max_length=255, unique=True)
     tags = TaggableManager(blank=True)
 
@@ -56,7 +56,7 @@ class UserProfile(models.Model):
     following = models.ManyToManyField('self',  blank=True, related_name='followers', symmetrical=False)
     tags = TaggableManager(blank = True)
     created_date = models.DateTimeField(default = timezone.now)
-    dp = models.ImageField(upload_to='images', default = 'default.png')
+    dp = models.ImageField(upload_to='images', default = 'default.png', validators=[validate_image_extension])
 
 
 class Vote(models.Model):
