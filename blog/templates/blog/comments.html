@@ -9,7 +9,7 @@
         <img  src = "{{comment.author.userprofile.dp.url}}" height = "80" width = "80">
     </div>
           <div class="col-md-10">  
-            <h5><strong>{{ comment.author }}</strong></h5>
+            <h5><strong><a href="{% url 'profile' username=comment.author.get_username %}">{{ comment.author }}</a></strong></h5>
         </div>
     </div>
         <div>

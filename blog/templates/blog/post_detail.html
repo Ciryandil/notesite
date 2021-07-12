@@ -29,12 +29,31 @@
     </div>
     <div class="note-link">
         <a class="btn btn-default" href="{{post.note.url}}">Show Note</a>
-    </div>
-    <div>
-        {% if user.is_authenticated %} 
-       
+        <div>
+        {% if request.user.is_authenticated %} 
+        {% if request.user != post.author %} 
+        {% if flag == 2 %}
+        <a href="{% url 'vote' slug=post.slug value=2 %}" class = "btn btn-danger" style="float: right;">Downvote</a>
+        {% else %}
+        <a href="{% url 'vote' slug=post.slug value=2 %}" class = "btn btn-outline-danger" style="float: right;">Downvote</a>
+        {% endif %} 
+        <h4 class = "display-5" style="float: right;">{{upvotes}}</h4>
+        {% if flag == 1 %}
+        <a href="{% url 'vote' slug=post.slug value=1 %}" class = "btn btn-success" style="float: right;">Upvote</a>
+        {% else %}
+        <a href="{% url 'vote' slug=post.slug value=1 %}" class = "btn btn-outline-success" style="float: right;">Upvote</a>
         {% endif %}
+        {% else %} 
+        <h4 class = "display-5" style="float: right;">Upvotes: {{upvotes}} Downvotes: {{downvotes}}</h4>
+        {% endif%} 
+        {% else %}
+        <h4 class = "display-5" style="float: right;">Upvotes: {{upvotes}}</h4>
+        {% endif %}
+        
+        
     </div>
+    </div>
+    
     <h5 class="display-5">Comments</h5>
     
     <div>

@@ -33,8 +33,14 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return reverse('post_detail',args=[self.slug])
+    def get_votecount(self, type):
+        votecount = 0
+        if type == "upvote":
+            votecount = self.votes.filter(score=1).count()
+        else:
+            votecount = self.votes.filter(score=2).count()
+        
+        return votecount
 
 
 class Comment(models.Model):

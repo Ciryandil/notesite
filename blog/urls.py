@@ -8,7 +8,9 @@ urlpatterns = [
     path('<username>/myfeed', views.create_feed, name='feed_list'),
     path('post/new/', views.post_new, name = 'post_new'),
     path('post/search',views.SearchView.as_view(), name='search_all'),
+    path('post/vote/<slug:slug>/<int:value>', views.vote, name = 'vote'),
     path('post/<slug:slug>/', views.post_detail, name = 'post_detail'),
+    
     path('post/<slug:slug>', views.post_edit, name='post_edit'),
     path('profile/<username>', views.profile, name='profile'),
     path('profile/<username>/search', views.SearchUserView.as_view(), name='search_user'),

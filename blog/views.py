@@ -2,7 +2,7 @@ from django.contrib.auth import login
 from django.core.exceptions import ValidationError
 from django.http.response import FileResponse, Http404
 from django.shortcuts import render, get_object_or_404
-from .models import Post, Comment, UserProfile
+from .models import Post, Comment, UserProfile, Vote
 from django.utils import timezone
 from django.shortcuts import redirect
 from .forms import PostForm, UserProfileForm, UserRegistrationForm, CommentForm
@@ -30,10 +30,19 @@ def post_detail(request, slug):
     # get post object
     post = get_object_or_404(Post, slug=slug)
     comments = Comment.objects.filter(post=post, parent=None)
-    
-    
+    upvote_count = post.get_votecount(type="upvote")
+    downvote_count = post.get_votecount(type="downvote")
+    flag = 0 
+    if request.user.is_authenticated and Vote.objects.filter(post=post,author=request.user).count() > 0:
+        vote = Vote.objects.filter(post=post,author=request.user).first()
+        if vote.score == 1:
+            flag = 1
+        elif vote.score == 2:
+            flag = 2
     return render(request,
-                  'blog/post_detail.html',{'post':post, 'comments': comments})
+                  'blog/post_detail.html',{'post':post, 'comments': comments, 'upvotes': upvote_count, 
+                  'downvotes': downvote_count, 'flag':flag,
+                  })
 
 def post_new(request):
     if request.method == "POST":
@@ -97,6 +106,26 @@ def get_note(request, slug):
         return FileResponse(open(path,'rb'), content_type = 'application/pdf')
     except:
         raise Http404()
+
+def vote(request, slug, value):
+    user = request.user
+    post = get_object_or_404(Post, slug = slug)
+    
+        
+    past_vote = Vote.objects.filter(author=user,post=post).count()
+    if past_vote == 0:
+        new_vote = Vote(post=post, author=user,score=value)
+        new_vote.save()
+    else:
+        old_vote = Vote.objects.filter(author=user,post=post).first()
+        if old_vote.score == value:
+            old_vote.score = 0
+        else:
+            old_vote.score = value
+        old_vote.save()
+
+    return redirect('post_detail',slug=slug)
+
 
 # ****************************************************************************************************************************
 
