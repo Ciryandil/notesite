@@ -28,7 +28,7 @@
     </div>
     <h6><a href = "{% url 'profile' username=post.author %}" class="author">{{post.author}}</a></h6>
     <p>{{ post.text|linebreaksbr }}</p>
-    <p class="comments">Comments: {{post.comments.count}}</p> 
+    <p class="comments">Comments: {{post.comments.count}} Upvotes: {{post.upvotes}}</p> 
 </article>
 {% endfor %}
 {% endblock %}  

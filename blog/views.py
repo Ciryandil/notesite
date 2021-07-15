@@ -123,6 +123,9 @@ def vote(request, slug, value):
         else:
             old_vote.score = value
         old_vote.save()
+    if value == 1:
+        post.upvotes += 1
+        post.save()
 
     return redirect('post_detail',slug=slug)
 

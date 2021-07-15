@@ -68,7 +68,7 @@
         </form>
         {% endif %}
     </div>
-    {% include 'blog/comments.html' with comments=comments user=user csrf_token=csrf_token only %}
+    {% include 'blog/comments.html' with comments=comments flag=false user=user csrf_token=csrf_token only %}
 
     
     {% endblock %}

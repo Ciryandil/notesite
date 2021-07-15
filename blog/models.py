@@ -19,9 +19,10 @@ class Post(models.Model):
     note = models.FileField(upload_to='media', validators=[validate_file_extension])
     slug = models.SlugField(max_length=255, unique=True)
     tags = TaggableManager(blank=True)
+    upvotes = models.IntegerField(default=0)
 
-    
-
+    class Meta:
+        ordering = ('-created_date','upvotes')
 
     def publish(self):
         self.created_date = timezone.now()

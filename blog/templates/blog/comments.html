@@ -1,20 +1,22 @@
 {% for comment in comments %}
 <div class="comment">
-    <div class="date">
-        {{ comment.created_date }}
-
-    </div>
-    <div class = "row my-3">
+    
+    <div class = "row my-2">
     <div class="col-md-1">
-        <img  src = "{{comment.author.userprofile.dp.url}}" height = "80" width = "80">
+        <img class="rounded-circle mx-auto d-block w-75 h-75 userdp" src = "{{comment.author.userprofile.dp.url}}">
     </div>
-          <div class="col-md-10">  
-            <h5><strong><a href="{% url 'profile' username=comment.author.get_username %}">{{ comment.author }}</a></strong></h5>
-        </div>
-    </div>
+          <div class="col-md-11" style="padding-left:0px">  
+              <div class="col-md-11">
+            <strong><a href="{% url 'profile' username=comment.author.get_username %}">{{ comment.author }}</a></strong>
+        </b> <span class="badge badge-secondary ">{{ comment.created_date }}</span>
         <div>
-    <p>{{ comment.text|linebreaks }}</p>
-</div>
+            {{ comment.text|linebreaks }}
+        </div>
+        </div>
+        <br>    
+    </div>
+    </div>
+        
 
     {% if user.is_authenticated %}
     <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#replyBox{{comment.id}}" aria-expanded="false" aria-controls="replyBox{{comment.id}}">
@@ -30,7 +32,7 @@
                     <input type="hidden" name="parent_id" value="{{comment.id}}">
                 </div>
                 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-sm btn-primary">Submit</button>
             </form>
         </div>
     </div>
@@ -42,7 +44,7 @@
             
             <div class="col-md-12">
                 <div class="col-md-12 class = "reply">
-                    {% include 'blog/comments.html' with comments=comment.replies.all user=user csrf_token=csrf_token only %}
+                    {% include 'blog/comments.html' with comments=comment.replies.all flag=True user=user csrf_token=csrf_token only %}
                 </div>
                 <br>
             </div>
