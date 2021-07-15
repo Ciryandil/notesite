@@ -33,3 +33,5 @@ secret.py
 *.pdf
 *.jpg
 *.png
+
+local_settings.py
