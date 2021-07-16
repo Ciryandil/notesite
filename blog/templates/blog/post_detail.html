@@ -51,9 +51,13 @@
         {% else %}
         <h4 class = "display-5" style="float: right;">Upvotes: {{upvotes}}</h4>
         {% endif %}
-        
-        <iframe id="notebox" height=75% width="50%" src="{{post.note.url}}">
-        </iframe>
+        <object data="{{post.note.url}}" type="application/pdf">
+            <iframe id = "notebox" src="https://docs.google.com/viewer? 
+            url={{post.note.url}}&embedded=true"
+            frameborder="0" webkitallowfullscreen mozallowfullscreen 
+            allowfullscreen>
+            </iframe>
+         </object>
         
         
     </div>
