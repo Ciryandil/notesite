@@ -59,7 +59,7 @@
                     width="150" height="150">
                     {% if member == user %}
                     <div class="row justify-content-center"> 
-                    <a href="{% url 'set_dp' username=member.get_username %}">Edit Profile Picture</a>
+                    <a href="{% url 'setdp' username=member.get_username %}">Edit Profile Picture</a>
                 </div>
                     {% endif %}
                     <p class = "author">User : {{member.get_username}}</p>
