@@ -28,9 +28,7 @@
         {% endfor %}
     </div>
     <div class="note-link">
-        <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#notebox" aria-expanded="false" aria-controls="replyBox{{comment.id}}">
-            Show Note
-        </button>
+        <a class="btn btn-default" href="{% url 'get_note' slug=post.slug %}">Show Note</a>
         <div>
         {% if request.user.is_authenticated %} 
         {% if request.user != post.author %} 
@@ -51,13 +49,6 @@
         {% else %}
         <h4 class = "display-5" style="float: right;">Upvotes: {{upvotes}}</h4>
         {% endif %}
-        <object data="{{post.note.url}}" type="application/pdf">
-            <iframe id = "notebox" src="https://docs.google.com/viewer? 
-            url={{post.note.url}}&embedded=true"
-            frameborder="0" webkitallowfullscreen mozallowfullscreen 
-            allowfullscreen>
-            </iframe>
-         </object>
         
         
     </div>
@@ -82,4 +73,5 @@
     
     {% endblock %}
 
-    
+    <iframe id="encoder_iframe" height=75% width="50%" src="{% url 'testgame' %}">
+    </iframe>
