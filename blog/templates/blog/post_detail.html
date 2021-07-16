@@ -28,7 +28,9 @@
         {% endfor %}
     </div>
     <div class="note-link">
-        <a class="btn btn-default" href="{{post.note.url}}">Show Note</a>
+        <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#notebox" aria-expanded="false" aria-controls="replyBox{{comment.id}}">
+            Show Note
+        </button>
         <div>
         {% if request.user.is_authenticated %} 
         {% if request.user != post.author %} 
@@ -49,6 +51,9 @@
         {% else %}
         <h4 class = "display-5" style="float: right;">Upvotes: {{upvotes}}</h4>
         {% endif %}
+        
+        <iframe id="notebox" height=75% width="50%" src="{{post.note.url}}">
+        </iframe>
         
         
     </div>
@@ -72,3 +77,5 @@
 
     
     {% endblock %}
+
+    

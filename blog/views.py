@@ -13,6 +13,8 @@ from django.utils.text import slugify
 from taggit.models import Tag
 from django.db.models import Q
 from django.views.generic import ListView
+from django.core.exceptions import PermissionDenied
+
 import datetime
 
 # Create your views here.
@@ -61,7 +63,10 @@ def post_new(request):
     return render(request,'blog/post_edit.html',{'form': form})
 
 def post_edit(request, slug):
+    
     post = get_object_or_404(Post, slug = slug)
+    if post.author != request.user:
+        raise PermissionDenied
     if request.method == "POST":
         form = PostForm(request.POST, instance = post)
         if form.is_valid:
@@ -95,7 +100,10 @@ def add_comment_to_post(request, slug):
      
 
 def post_remove(request, slug):
+    
     post = get_object_or_404(Post, slug=slug)
+    if post.author != request.user:
+        raise PermissionDenied
     post.delete()
     return redirect('post_list')
 
@@ -110,7 +118,8 @@ def get_note(request, slug):
 def vote(request, slug, value):
     user = request.user
     post = get_object_or_404(Post, slug = slug)
-    
+    if not request.user.is_authenticated:
+        raise PermissionDenied
         
     past_vote = Vote.objects.filter(author=user,post=post).count()
     if past_vote == 0:
@@ -138,6 +147,7 @@ def vote(request, slug, value):
 def profile(request, username = None):
     if User.objects.get(username=username):
         user = User.objects.get(username = username)
+        
         posts = Post.objects.filter(author = user).order_by('-created_date')
         date_joined = user.date_joined.date()
         last_active = user.last_login
@@ -166,6 +176,10 @@ def register(request):
 
 def set_picture(request, username = None):
    
+   if not request.user.isauthenticated:
+       raise PermissionDenied
+   if request.user.username != username:
+        raise PermissionDenied
    try:
     userprofile = request.user.userprofile
    except UserProfile.DoesNotExist:
@@ -187,6 +201,8 @@ def set_picture(request, username = None):
    return render(request,'blog/profilepicture.html',{'form': form})
 
 def set_follow(request, username = None):
+    if not request.user.is_authenticated:
+       raise PermissionDenied
     if User.objects.filter(username=username).exists():
         user = User.objects.get(username = username)
         profile1 = user.userprofile
@@ -197,6 +213,8 @@ def set_follow(request, username = None):
         return render("User not found")
 
 def set_unfollow(request, username = None):
+    if not request.user.is_authenticated:
+       raise PermissionDenied
     if User.objects.filter(username=username).exists():
         user = User.objects.get(username=username)
         profile1 = user.userprofile
@@ -209,11 +227,15 @@ def set_unfollow(request, username = None):
 
 def add_topic(request, slug):
     tag = get_object_or_404(Tag,slug=slug)
+    if not request.user.is_authenticated:
+       raise PermissionDenied 
     request.user.userprofile.tags.add(tag)
 
     return redirect(get_tagged,slug = slug)
 
 def remove_topic(request, slug):
+    if not request.user.is_authenticated:
+       raise PermissionDenied
     tag = get_object_or_404(Tag,slug=slug)
     request.user.userprofile.tags.remove(tag)
 
