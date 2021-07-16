@@ -109,7 +109,7 @@ def post_remove(request, slug):
 
 def get_note(request, slug):
     post = get_object_or_404(Post, slug = slug)
-    path = post.note.url
+    path = post.note.name
     try:
         return FileResponse(open(path,'rb'), content_type = 'application/pdf')
     except:
