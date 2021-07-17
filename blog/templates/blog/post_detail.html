@@ -34,7 +34,7 @@
         </button>
         <div>
         
-            <a id = "notebox" class="dropbox-embed" src="{{url}}" height="700" width="100%" frameborder="0" marginheight="0" marginwidth="0" ></a>
+            <a id = "notebox" class="dropbox-embed" src="{{url}}" data-height="700px" data-width="100%" ></a>
         {% if request.user.is_authenticated %} 
         {% if request.user != post.author %} 
         {% if flag == 2 %}
