@@ -111,7 +111,7 @@ def get_note(request, slug):
     post = get_object_or_404(Post, slug = slug)
     path = post.note.name
     try:
-        return FileResponse(open(path,'rb'), content_type = 'application/pdf')
+        return FileResponse(post.note.open(mode='rb'), content_type = 'application/pdf')
     except:
         raise Http404()
 
