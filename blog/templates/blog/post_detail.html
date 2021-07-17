@@ -28,8 +28,10 @@
         {% endfor %}
     </div>
     <div class="note-link">
-        <a class="btn btn-default" href="{% url 'get_note' slug=post.slug %}">Show Note</a>
+        <a class="btn btn-default" href="{{post.note.url}}">Show Note</a>
         <div>
+            <embed src="{{post.note.url}}" height="300px" width="300px" />
+            
         {% if request.user.is_authenticated %} 
         {% if request.user != post.author %} 
         {% if flag == 2 %}
@@ -73,5 +75,4 @@
     
     {% endblock %}
 
-    <iframe id="encoder_iframe" height=75% width="50%" src="{% url 'testgame' %}">
-    </iframe>
+   
