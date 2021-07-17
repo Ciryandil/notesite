@@ -112,10 +112,10 @@ def post_remove(request, slug):
 def get_note(slug):
     post = get_object_or_404(Post, slug = slug)
     filepath = post.note.name
-    dbx = dropbox.Dropbox(os.environ('DROPBOX_OAUTH2_TOKEN'))
+    dbx = dropbox.Dropbox(os.environ['DROPBOX_OAUTH2_TOKEN'])
     url = dbx.sharing_create_shared_link(path = filepath,  short_url=False, pending_upload=None)
     return url
-    
+
 def vote(request, slug, value):
     user = request.user
     post = get_object_or_404(Post, slug = slug)
