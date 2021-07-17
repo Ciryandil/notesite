@@ -26,10 +26,14 @@
         {% for tag in post.tags.all %}
         <a href="{% url 'get_tagged' slug=tag.slug %}" class="mr-2 mb-2 badge badge-info"><h6>{{ tag }}</h6></a>
         {% endfor %}
+        <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="notebox" aria-expanded="false" aria-controls="notebox">
+            Show Note
+        </button>
     </div>
     <div class="note-link">
-       
+       <div class="collapse" id = "notebox">
         <a class="dropbox-embed" href="{{url}}" data-height = "700px" data-width = "100%">Note</a>
+    </div>
         <div>
         
             
