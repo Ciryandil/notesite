@@ -113,7 +113,7 @@ def get_note(slug):
     post = get_object_or_404(Post, slug = slug)
     filepath = post.note.name
     dbx = dropbox.Dropbox(os.environ['DROPBOX_OAUTH2_TOKEN'])
-    url = dbx.sharing_create_shared_link(path = filepath,  short_url=False, pending_upload=None)
+    url = dbx.sharing_create_shared_link(path = filepath,  short_url=False, pending_upload=None).url
     return url
 
 def vote(request, slug, value):
