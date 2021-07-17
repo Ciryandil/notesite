@@ -34,7 +34,7 @@
         </button>
         <div>
         
-            <iframe id = "notebox" src="{{url}}" allowfullscreen webkitallowfullscreen mozallowfullscreen height="700" width="100%" frameborder="0" marginheight="0" marginwidth="0" ></iframe>
+            <iframe id = "notebox" class ="dropbox-embed" src="{{url}}" allowfullscreen webkitallowfullscreen mozallowfullscreen height="700" width="100%" frameborder="0" marginheight="0" marginwidth="0" ></iframe>
         {% if request.user.is_authenticated %} 
         {% if request.user != post.author %} 
         {% if flag == 2 %}
