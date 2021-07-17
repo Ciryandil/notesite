@@ -16,7 +16,8 @@ from django.views.generic import ListView
 from django.core.exceptions import PermissionDenied
 
 import datetime
-
+import dropbox
+import os
 # Create your views here.
 
 
@@ -34,6 +35,7 @@ def post_detail(request, slug):
     comments = Comment.objects.filter(post=post, parent=None)
     upvote_count = post.get_votecount(type="upvote")
     downvote_count = post.get_votecount(type="downvote")
+    url = get_note(slug)
     flag = 0 
     if request.user.is_authenticated and Vote.objects.filter(post=post,author=request.user).count() > 0:
         vote = Vote.objects.filter(post=post,author=request.user).first()
@@ -43,7 +45,7 @@ def post_detail(request, slug):
             flag = 2
     return render(request,
                   'blog/post_detail.html',{'post':post, 'comments': comments, 'upvotes': upvote_count, 
-                  'downvotes': downvote_count, 'flag':flag,
+                  'downvotes': downvote_count, 'flag':flag, 'url': url,
                   })
 
 def post_new(request):
@@ -107,14 +109,13 @@ def post_remove(request, slug):
     post.delete()
     return redirect('post_list')
 
-def get_note(request, slug):
+def get_note(slug):
     post = get_object_or_404(Post, slug = slug)
-    path = post.note.name
-    try:
-        return FileResponse(post.note.open(mode='rb'), content_type = 'application/pdf')
-    except:
-        raise Http404()
-
+    filepath = post.note.name
+    dbx = dropbox.Dropbox(os.environ('DROPBOX_OAUTH2_TOKEN'))
+    url = dbx.sharing_create_shared_link(path = filepath,  short_url=False, pending_upload=None)
+    return url
+    
 def vote(request, slug, value):
     user = request.user
     post = get_object_or_404(Post, slug = slug)
