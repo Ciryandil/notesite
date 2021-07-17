@@ -30,8 +30,7 @@
     <div class="note-link">
         <a class="btn btn-default" href="{{post.note.url}}">Show Note</a>
         <div>
-            <embed src="{{post.note.url}}" height="300px" width="300px" />
-            
+           
         {% if request.user.is_authenticated %} 
         {% if request.user != post.author %} 
         {% if flag == 2 %}
