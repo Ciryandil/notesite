@@ -29,13 +29,11 @@
     </div>
     <div class="note-link">
        
-        <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#notebox">
-            Show Note
-        </button>
+        <a class="dropbox-embed" src="{{url}}" data-height="700px" data-width="100%" >Note</a>
         <div>
-        <div id="notebox">
-            <a class="dropbox-embed" src="{{url}}" data-height="700px" data-width="100%" ></a>
-        </div>
+        
+            
+        
         {% if request.user.is_authenticated %} 
         {% if request.user != post.author %} 
         {% if flag == 2 %}
