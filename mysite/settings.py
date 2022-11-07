@@ -27,7 +27,7 @@ SECRET_KEY = os.environ['SECRET_KEY']
 DROPBOX_APP_KEY = os.environ['DROPBOX_APP_KEY']
 DROPBOX_APP_SECRET = os.environ['DROPBOX_APP_SECRET']
 DROPBOX_REFRESH_TOKEN = os.environ['DROPBOX_REFRESH_TOKEN']
-
+DROPBOX_OAUTH2_TOKEN = os.environ['DROPBOX_OAUTH2_TOKEN']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
