@@ -14,7 +14,7 @@ from taggit.models import Tag
 from django.db.models import Q
 from django.views.generic import ListView
 from django.core.exceptions import PermissionDenied
-
+from mysite.settings import DROPBOX_APP_KEY, DROPBOX_APP_SECRET, DROPBOX_REFRESH_TOKEN
 import datetime
 import dropbox
 import os
@@ -112,7 +112,11 @@ def post_remove(request, slug):
 def get_note(slug):
     post = get_object_or_404(Post, slug = slug)
     filepath = post.note.name
-    dbx = dropbox.Dropbox(os.environ['DROPBOX_OAUTH2_TOKEN'])
+    dbx = dropbox.Dropbox(
+        app_key = DROPBOX_APP_KEY,
+        app_secret=DROPBOX_APP_SECRET,
+        oauth2_refresh_token= DROPBOX_REFRESH_TOKEN
+    )
     url = dbx.sharing_create_shared_link(path = filepath,  short_url=False, pending_upload=None).url
     return url
 

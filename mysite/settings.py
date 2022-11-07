@@ -24,7 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
-DROPBOX_OAUTH2_TOKEN = os.environ['DROPBOX_OAUTH2_TOKEN']
+DROPBOX_APP_KEY = os.environ['DROPBOX_APP_KEY']
+DROPBOX_APP_SECRET = os.environ['DROPBOX_APP_SECRET']
+DROPBOX_REFRESH_TOKEN = os.environ['DROPBOX_REFRESH_TOKEN']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
