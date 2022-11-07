@@ -1,0 +1,241 @@
+a {
+    font-family: 'Lobster';
+    color: #000000;
+    
+}
+a:hover {
+    color:#000000;
+}
+
+.author 
+{
+    font-size: 15pt;
+}
+
+.comments
+{
+    font-family: 'Trebuchet MS';
+
+}
+
+h1 a, h2 a {
+    color: #C25100;
+    font-family: 'Lobster';
+}
+
+
+
+body {
+    padding-left: 15px;
+    
+}
+
+.page-header {
+    background-color: #C25100;
+    margin-top: 0;
+    margin-bottom: 40px;
+    padding: 20px 20px 20px 40px;
+}
+
+.page-header h1,
+.page-header h1 a,
+.page-header h1 a:visited,
+.page-header h1 a:active {
+    color: #ffffff;
+    font-size: 36pt;
+    text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Lobster', cursive;
+}
+
+.date {
+    color: #828282;
+}
+
+.save {
+    float: right;
+}
+
+.post-form textarea,
+.post-form input {
+    width: 100%;
+}
+
+.top-menu,
+.top-menu:hover,
+.top-menu:visited
+{
+    color: #ffffff;
+    float: right;
+    font-size: 12pt;
+    margin-right: 20px;
+}
+
+.post {
+    margin-bottom: 70px;
+    padding-top: 40px;
+}
+
+.post h2 a,
+.post h2 a:visited {
+    color: #000000;
+}
+
+.post > .date,
+.post > .actions {
+    float: right;
+}
+
+.btn-default,
+.btn-sm,
+.btn-primary,
+.btn-default:visited {
+    color: #C25100;
+    background: none;
+    border-color: #C25100;
+}
+
+.btn-sm:hover,
+.btn-primary:hover,
+.btn-default:hover {
+    color: #FFFFFF;
+    background-color: #C25100;
+}
+
+.sidebar {
+  height: 100%; /* 100% Full-height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0;
+  left: 0;
+  background-color: #111; /* Black*/
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+}
+
+/* The sidebar links */
+.sidebar a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  font-family: 'Lobster';
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidebar a:hover {
+  color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidebar .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+/* The button used to open the sidebar */
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #C25100;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+}
+
+.openbtn:hover {
+  background-color: #C25100;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+  transition: margin-left .5s; /* If you want a transition effect */
+  padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+  .sidebar {padding-top: 15px;}
+  .sidebar a {font-size: 18px;}
+}
+
+
+#userpanel
+{
+    border-right-style:solid;
+    border-right-width:medium;
+    border-right-color: grey;
+    margin-right: 30px;
+    
+
+}
+
+.page-header{
+
+    
+    margin-left: 0px;
+    border-left: 0px;
+}
+
+body{
+    padding-left: 0px;
+}
+
+#postlist
+{
+    padding-top: 20px;
+}
+
+.default-text
+{
+    font-size: 2.5rem;
+}
+
+.note-link
+{
+    padding-bottom: 40px;
+    border-bottom-style:solid;
+    border-bottom-width:medium;
+    border-bottom-color: grey;
+    margin-bottom: 30px;
+}
+
+.reply
+{
+    padding-left: 30px;
+}
+
+img 
+{
+    width: 100px;
+    height: 100px;
+}
+
+.btn
+{
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.25rem;
+} 
+
+.userdp {
+    display: inline-block;
+    padding-right: 0px;
+    height: 1rem;
+    width: 1rem;
+
+
+    object-fit: cover;
+  }
