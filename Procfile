@@ -1,1 +1,1 @@
-web: gunicorn mysite.wsgi --log-file -
+python manage.py collecstatic && python manage.py makemigrations blog && python manage.py migrate && gunicorn mysite.wsgi
