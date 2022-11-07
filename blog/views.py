@@ -177,7 +177,7 @@ def register(request):
 
 def set_picture(request, username = None):
    
-   if not request.user.isauthenticated:
+   if not request.user.is_authenticated:
        raise PermissionDenied
    if request.user.username != username:
         raise PermissionDenied
@@ -255,7 +255,7 @@ def create_feed(request,username):
         followed_posts  = Post.objects.filter(author = member)
         posts = posts | followed_posts
     posts = posts | Post.objects.filter(author = user)
-    posts = posts.order_by('-created_date')
+    posts = posts.order_by('-created_date').distinct()
     return render(request, 'blog/post_list.html',{'object_list': posts})
 
 def get_userlist(request, username, slug):
