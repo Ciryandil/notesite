@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'taggit',
     'django_cleanup.apps.CleanupConfig',
     'storages',
+    'whitenoise.runserver_nostatic'
     
     
 ]
