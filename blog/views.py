@@ -133,14 +133,18 @@ def vote(request, slug, value):
     else:
         old_vote = Vote.objects.filter(author=user,post=post).first()
         if old_vote.score == value:
+            if value == 1:
+                post.upvotes -= 1
+                post.save()
             old_vote.score = 0
         else:
             old_vote.score = value
-        old_vote.save()
-    if value == 1:
-        post.upvotes += 1
-        post.save()
+        
+            if value == 1:
+                post.upvotes += 1
+                post.save()
 
+        old_vote.save()
     return redirect('post_detail',slug=slug)
 
 
